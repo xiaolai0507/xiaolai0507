@@ -6,9 +6,10 @@
     <title>数字统计器</title>
 </head>
 <body>
-    <h1>小赖专用统计器</h1>
+    <h1>数字统计器</h1>
     <textarea id="numberInput" rows="10" cols="50" placeholder="请输入数字，用空格、换行符、点等分隔"></textarea><br>
     <button onclick="countNumbers()">统计</button>
+    <button onclick="clearInput()">清空输入</button><br>
     <h2>统计结果</h2>
     <textarea id="result" rows="15" cols="50"></textarea><br>
     <button onclick="copyToClipboard()">复制结果</button>
@@ -72,6 +73,11 @@
             } catch (err) {
                 alert('复制失败，请手动复制');
             }
+        }
+
+        // 清空输入框
+        function clearInput() {
+            document.getElementById('numberInput').value = '';
         }
     </script>
 </body>
