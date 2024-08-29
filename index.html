@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数字统计器</title>
+</head>
+<body>
+    <h1>小赖专用统计器</h1>
+    <textarea id="numberInput" rows="10" cols="50" placeholder="请输入数字，用空格、换行符、点等分隔"></textarea><br>
+    <button onclick="countNumbers()">统计</button>
+    <h2>统计结果</h2>
+    <textarea id="result" rows="15" cols="50"></textarea><br>
+    <button onclick="copyToClipboard()">复制结果</button>
+
+    <script>
+        function countNumbers() {
+            const input = document.getElementById('numberInput').value;
+
+            // 移除括号和其他可能的特殊符号
+            const cleanedInput = input.replace(/[【】\[\]{}()<>]/g, '');
+
+            // 正则表达式匹配空格、逗号、点、换行符等分隔符
+            const numbers = cleanedInput.split(/[\s,.\n]+/).map(Number);
+
+            const countMap = {};
+            let totalCount = 0; // 计数总共输入了多少个数字
+
+            // 统计每个数字出现的次数，只计算1-49之间的数字
+            numbers.forEach(num => {
+                if (num >= 1 && num <= 49) {  // 只统计1-49范围内的数字
+                    countMap[num] = (countMap[num] || 0) + 1;
+                    totalCount++;  // 统计有效数字的总个数
+                }
+            });
+
+            // 确保每个1-49的数字都有记录，即使出现0次
+            for (let i = 1; i <= 49; i++) {
+                if (!countMap[i]) {
+                    countMap[i] = 0;
+                }
+            }
+
+            // 创建一个对象以次数为键来分组
+            const resultMap = {};
+            for (const [num, count] of Object.entries(countMap)) {
+                if (!resultMap[count]) {
+                    resultMap[count] = [];
+                }
+                resultMap[count].push(num);
+            }
+
+            // 构建结果字符串，包含每组的数量和出现0次的号码
+            let result = `总共输入了 ${totalCount} 个有效数字\n\n`;
+            for (const [count, nums] of Object.entries(resultMap)) {
+                result += `${count} 次的号码 (${nums.length} 个): ${nums.join(', ')}\n`;
+            }
+
+            // 显示结果在文本框内
+            document.getElementById('result').value = result;
+        }
+
+        // 复制功能
+        function copyToClipboard() {
+            const resultTextArea = document.getElementById('result');
+            resultTextArea.select();
+            resultTextArea.setSelectionRange(0, 99999); // 兼容移动设备
+
+            try {
+                document.execCommand('copy');
+                alert('结果已复制到剪贴板');
+            } catch (err) {
+                alert('复制失败，请手动复制');
+            }
+        }
+    </script>
+</body>
+</html>
